@@ -47,7 +47,9 @@
     "eslint-plugin-jest": "^23.8.2",
     "husky": "^4.2.3",
     "lint-staged": "^10.1.1",
-    "prettier": "^2.0.2"
+    "node-sass": "^4.13.1",
+    "prettier": "^2.0.2",
+    "spectre.css": "^0.5.8"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
