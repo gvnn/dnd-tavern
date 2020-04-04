@@ -11,7 +11,7 @@ export const ConnectionStatus = () => {
       return (
         <span className="mr-1">
           {path}:{''}
-          <code className="ml-1">{value}</code>
+          <code className="ml-1">{String(value)}</code>
         </span>
       );
     }
@@ -23,6 +23,8 @@ export const ConnectionStatus = () => {
       <p>
         {printStatePath('connectionStatus')}
         {printStatePath('brokerId')}
+        {printStatePath('remoteBrokerId')}
+        {printStatePath('isHost')}
       </p>
     </div>
   );
