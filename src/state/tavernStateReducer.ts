@@ -3,18 +3,23 @@ import Peer from 'peerjs';
 interface TavernState {
   connectionStatus: string;
   brokerId: string | null;
+  remoteBrokerId: string | null;
   peerInstance: Peer | null;
+  isHost: boolean;
 }
 
 export const initialState: TavernState = {
   connectionStatus: 'NOT_CONNECTED',
   brokerId: null,
+  remoteBrokerId: null,
   peerInstance: null,
+  isHost: false,
 };
 
 export interface ConnectedAction {
   type: 'CONNECTED';
   brokerId: string;
+  remoteBrokerId: string;
 }
 
 export interface ConnectAction {
@@ -63,7 +68,9 @@ export const tavernStateReducer = (
       return {
         ...state,
         brokerId: action.brokerId,
+        remoteBrokerId: action.remoteBrokerId,
         connectionStatus: 'CONNECTED',
+        isHost: action.brokerId === action.remoteBrokerId,
       };
   }
 };

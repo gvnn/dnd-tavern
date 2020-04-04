@@ -10,6 +10,33 @@ export const LaunchPeer = () => {
     'Disconnect',
   );
 
+  const [remoteBrokerId, setRemoteBrokerId] = useState<string>('');
+
+  const connectAsHost = (
+    peer: Peer,
+    { brokerId, remoteBrokerId }: { brokerId: string; remoteBrokerId: string },
+  ) => {
+    dispatch({ type: 'CONNECTED', brokerId, remoteBrokerId });
+    setConnectButtonState('Connected');
+    peer.on('connection', (connection) => {
+      connection.on('data', console.log);
+    });
+  };
+
+  const connectAsClient = (
+    peer: Peer,
+    { brokerId, remoteBrokerId }: { brokerId: string; remoteBrokerId: string },
+  ) => {
+    const newConnection = peer.connect(remoteBrokerId);
+    newConnection.on('open', function () {
+      dispatch({ type: 'CONNECTED', brokerId, remoteBrokerId });
+      setConnectButtonState('Connected');
+      // here you have conn.id
+      newConnection.send('hi!');
+    });
+    newConnection.on('data', console.log);
+  };
+
   const connect = () => {
     dispatch({ type: 'CONNECT' });
     setConnectButtonState('Connecting...');
@@ -26,9 +53,12 @@ export const LaunchPeer = () => {
       setDisconnectButtonState('Disconnect');
     });
 
-    peer.on('open', (brokerId) => {
-      dispatch({ type: 'CONNECTED', brokerId });
-      setConnectButtonState('Connected');
+    peer.on('open', (Id) => {
+      if (remoteBrokerId !== '' && remoteBrokerId !== Id) {
+        connectAsClient(peer, { brokerId: Id, remoteBrokerId });
+      } else {
+        connectAsHost(peer, { brokerId: Id, remoteBrokerId: Id });
+      }
     });
 
     dispatch({ type: 'SET_PEER', peerInstance: peer });
@@ -40,10 +70,32 @@ export const LaunchPeer = () => {
     state.peerInstance?.destroy();
   };
 
+  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setRemoteBrokerId(event.currentTarget.value);
+  };
+
   const renderConnect = () => (
-    <button className="btn" onClick={connect}>
-      {connectButtonState}
-    </button>
+    <>
+      <div className="form-group">
+        <input
+          className="form-input"
+          type="text"
+          placeholder="Broker ID"
+          autoComplete="off"
+          spellCheck="false"
+          value={remoteBrokerId}
+          onChange={onChange}
+        ></input>
+        <p className="form-input-hint">
+          If you want to connect to an existing peer ask your friends for a{' '}
+          <em>Broker ID</em>. If you starting a new peer just press the{' '}
+          <em>Connect</em> button.
+        </p>
+      </div>
+      <button className="btn" onClick={connect}>
+        {connectButtonState}
+      </button>
+    </>
   );
 
   const renderDisconnect = () => (

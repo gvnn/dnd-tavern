@@ -7,9 +7,13 @@ const App = () => (
   <div className="container">
     <ConnectionStatus />
     <div className="columns">
-      <div className="column">
+      <div className="column col-12">
         <h1>dnd-tavern</h1>
-        <LaunchPeer />
+        <div className="columns">
+          <div className="column col-6 col-lg-9 col-md-9 col-sm-12">
+            <LaunchPeer />
+          </div>
+        </div>
       </div>
     </div>
   </div>
