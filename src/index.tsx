@@ -2,10 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { TavernProvider } from './state/tavern';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <TavernProvider>
+      <App />
+    </TavernProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
