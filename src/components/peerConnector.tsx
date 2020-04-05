@@ -23,6 +23,10 @@ export const PeerConnector = () => {
 
   const printButtonText = (status: string) => {
     switch (status) {
+      case 'NOT_CONNECTED':
+        return 'Connect';
+      case 'CONNECTED':
+        return 'Disconnect';
       case 'DISCONNECTING':
         return 'Disconnecting...';
       case 'CONNECTING':

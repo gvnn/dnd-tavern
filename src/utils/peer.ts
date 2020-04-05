@@ -8,7 +8,7 @@ const connectAsHost = (
 ) => {
   dispatch({ type: 'CONNECTED', brokerId, remoteBrokerId });
   peer.on('connection', (connection) => {
-    console.log(connection);
+    dispatch({ type: 'NEW_CONNECTION', connection });
     connection.on('data', console.log);
   });
 };
@@ -18,13 +18,12 @@ const connectAsClient = (
   peer: Peer,
   { brokerId, remoteBrokerId }: { brokerId: string; remoteBrokerId: string },
 ) => {
-  const newConnection = peer.connect(remoteBrokerId);
-  newConnection.on('open', function () {
+  const remoteConnection = peer.connect(remoteBrokerId);
+  remoteConnection.on('open', function () {
     dispatch({ type: 'CONNECTED', brokerId, remoteBrokerId });
-    // here you have conn.id
-    newConnection.send('hi!');
+    dispatch({ type: 'NEW_CONNECTION', connection: remoteConnection });
   });
-  newConnection.on('data', console.log);
+  remoteConnection.on('data', console.log);
 };
 
 export const connect = (

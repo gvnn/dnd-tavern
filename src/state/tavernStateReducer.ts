@@ -48,18 +48,32 @@ export interface SetPeerAction {
   peerInstance: Peer;
 }
 
+export interface NewConnectionAction {
+  type: 'NEW_CONNECTION';
+  connection: Peer.DataConnection;
+}
+
 type ReducerActions =
   | ConnectedAction
   | ConnectAction
   | DisconnectAction
   | DisconnectedAction
   | SetPeerAction
-  | PeerErrorAction;
+  | PeerErrorAction
+  | NewConnectionAction;
 
 export interface TavernStateContext {
   state: TavernState;
   dispatch: React.Dispatch<ReducerActions>;
 }
+
+const appendConnection = (
+  existing: Peer.DataConnection[],
+  newConnection: Peer.DataConnection,
+) => [
+  ...existing.filter((conn) => conn.peer !== newConnection.peer),
+  newConnection,
+];
 
 export const tavernStateReducer = (
   state: TavernState,
@@ -76,6 +90,11 @@ export const tavernStateReducer = (
       return initialState;
     case 'PEER_ERROR':
       return { ...state, connectionStatus: 'ERROR', err: action.err };
+    case 'NEW_CONNECTION':
+      return {
+        ...state,
+        connections: appendConnection(state.connections, action.connection),
+      };
     case 'CONNECTED':
       return {
         ...state,
