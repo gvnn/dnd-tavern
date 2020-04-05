@@ -8,7 +8,8 @@ export const PeerConnector = () => {
   const [remoteBrokerId, setRemoteBrokerId] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
 
-  const connectPeer = () => {
+  const connectPeer = (event: React.FormEvent) => {
+    event.preventDefault();
     dispatch({ type: 'CONNECT' });
     connect({ state, dispatch }, { remoteBrokerId, nickname });
   };
@@ -42,7 +43,7 @@ export const PeerConnector = () => {
   };
 
   const renderConnect = () => (
-    <>
+    <form onSubmit={connectPeer}>
       <div className="form-group">
         <input
           className="form-input"
@@ -70,10 +71,10 @@ export const PeerConnector = () => {
           onChange={onNicknameChange}
         ></input>
       </div>
-      <button className="btn" onClick={connectPeer}>
+      <button type="submit" className="btn">
         {printButtonText(state.connectionStatus)}
       </button>
-    </>
+    </form>
   );
 
   const renderDisconnect = () => (

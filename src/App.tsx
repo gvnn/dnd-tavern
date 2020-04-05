@@ -3,6 +3,7 @@ import './App.scss';
 import { PeerConnector } from './components/peerConnector';
 import { ConnectionStatus } from './components/connectionStatus';
 import { ConnectionsList } from './components/connectionsList';
+import { DiceRoller } from './components/diceRoller';
 
 const App = () => (
   <div className="container">
@@ -16,6 +17,7 @@ const App = () => (
           </div>
         </div>
         <ConnectionsList />
+        <DiceRoller />
       </div>
     </div>
   </div>
