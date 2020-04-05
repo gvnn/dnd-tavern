@@ -35,7 +35,7 @@ export const DiceRoller = () => {
     <form onSubmit={rollDice}>
       <div className="panel">
         <div className="panel-header">
-          <div className="panel-title">Rice roller</div>
+          <div className="panel-title">Rollin'</div>
         </div>
         <div className="panel-body">
           <div className="form-group">
