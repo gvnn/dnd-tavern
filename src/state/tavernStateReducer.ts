@@ -6,6 +6,8 @@ interface TavernState {
   remoteBrokerId: string | null;
   peerInstance: Peer | null;
   isHost: boolean;
+  connections: Peer.DataConnection[];
+  err: any;
 }
 
 export const initialState: TavernState = {
@@ -14,6 +16,8 @@ export const initialState: TavernState = {
   remoteBrokerId: null,
   peerInstance: null,
   isHost: false,
+  connections: [],
+  err: undefined,
 };
 
 export interface ConnectedAction {
@@ -34,6 +38,11 @@ export interface DisconnectedAction {
   type: 'DISCONNECTED';
 }
 
+export interface PeerErrorAction {
+  type: 'PEER_ERROR';
+  err: any;
+}
+
 export interface SetPeerAction {
   type: 'SET_PEER';
   peerInstance: Peer;
@@ -44,7 +53,8 @@ type ReducerActions =
   | ConnectAction
   | DisconnectAction
   | DisconnectedAction
-  | SetPeerAction;
+  | SetPeerAction
+  | PeerErrorAction;
 
 export interface TavernStateContext {
   state: TavernState;
@@ -64,6 +74,8 @@ export const tavernStateReducer = (
       return { ...state, connectionStatus: 'DISCONNECTING' };
     case 'DISCONNECTED':
       return initialState;
+    case 'PEER_ERROR':
+      return { ...state, connectionStatus: 'ERROR', err: action.err };
     case 'CONNECTED':
       return {
         ...state,

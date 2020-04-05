@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.scss';
-import { LaunchPeer } from './components/launchPeer';
+import { PeerConnector } from './components/peerConnector';
 import { ConnectionStatus } from './components/connectionStatus';
 
 const App = () => (
@@ -11,7 +11,7 @@ const App = () => (
         <h1>dnd-tavern</h1>
         <div className="columns">
           <div className="column col-6 col-lg-9 col-md-9 col-sm-12">
-            <LaunchPeer />
+            <PeerConnector />
           </div>
         </div>
       </div>
