@@ -6,7 +6,9 @@ export const ConnectionsList = () => {
   return (
     <ul>
       {state.connections.map((conn) => (
-        <li key={conn.peer}>{conn.peer}</li>
+        <li key={conn.peer}>
+          {conn.peer} ({conn.metadata?.nickname})
+        </li>
       ))}
     </ul>
   );

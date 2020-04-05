@@ -6,10 +6,11 @@ export const PeerConnector = () => {
   const { state, dispatch } = useTavern();
 
   const [remoteBrokerId, setRemoteBrokerId] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
 
   const connectPeer = () => {
     dispatch({ type: 'CONNECT' });
-    connect({ state, dispatch }, { remoteBrokerId });
+    connect({ state, dispatch }, { remoteBrokerId, nickname });
   };
 
   const disconnectPeer = () => {
@@ -19,6 +20,10 @@ export const PeerConnector = () => {
 
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     setRemoteBrokerId(event.currentTarget.value);
+  };
+
+  const onNicknameChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setNickname(event.currentTarget.value);
   };
 
   const printButtonText = (status: string) => {
@@ -53,6 +58,17 @@ export const PeerConnector = () => {
           <em>Broker ID</em>. If you starting a new peer just press the{' '}
           <em>Connect</em> button.
         </p>
+      </div>
+      <div className="form-group">
+        <input
+          className="form-input"
+          type="text"
+          placeholder="My Nickname"
+          autoComplete="off"
+          spellCheck="false"
+          value={nickname}
+          onChange={onNicknameChange}
+        ></input>
       </div>
       <button className="btn" onClick={connectPeer}>
         {printButtonText(state.connectionStatus)}

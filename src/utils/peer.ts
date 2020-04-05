@@ -19,9 +19,15 @@ const connectAsHost = (
 const connectAsClient = (
   { dispatch }: TavernStateContext,
   peer: Peer,
-  { brokerId, remoteBrokerId }: { brokerId: string; remoteBrokerId: string },
+  {
+    brokerId,
+    remoteBrokerId,
+    nickname,
+  }: { brokerId: string; remoteBrokerId: string; nickname: string },
 ) => {
-  const remoteConnection = peer.connect(remoteBrokerId);
+  const remoteConnection = peer.connect(remoteBrokerId, {
+    metadata: { nickname },
+  });
   remoteConnection.on('open', () => {
     dispatch({ type: 'CONNECTED', brokerId, remoteBrokerId });
     dispatch({ type: 'NEW_CONNECTION', connection: remoteConnection });
@@ -34,7 +40,7 @@ const connectAsClient = (
 
 export const connect = (
   ctx: TavernStateContext,
-  opts: { remoteBrokerId: string },
+  opts: { remoteBrokerId: string; nickname: string },
 ) => {
   const { state, dispatch } = ctx;
 
@@ -53,6 +59,7 @@ export const connect = (
       connectAsClient(ctx, peerInstance, {
         brokerId: id,
         remoteBrokerId: opts.remoteBrokerId,
+        nickname: opts.nickname,
       });
     } else {
       connectAsHost(ctx, peerInstance, {
