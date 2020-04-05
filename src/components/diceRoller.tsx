@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { roller } from '../utils/roller';
 import { DiceResult } from 'dice-typescript';
+import { useTavern } from '../state/tavern';
 
 export const DiceRoller = () => {
+  const { state } = useTavern();
+
   const [roll, setRoll] = useState<DiceResult | undefined>(undefined);
   const [rollValue, setRollValue] = useState<string>('');
 
@@ -13,7 +16,15 @@ export const DiceRoller = () => {
   const rollDice = (event: React.FormEvent) => {
     event.preventDefault();
     if (rollValue) {
-      setRoll(roller.roll(rollValue));
+      const rollResult = roller.roll(rollValue);
+      setRoll(rollResult);
+      state.connections.forEach((c) => {
+        c.send({
+          type: 'ROLL',
+          result: rollResult.renderedExpression,
+          total: rollResult.total,
+        });
+      });
     }
   };
 

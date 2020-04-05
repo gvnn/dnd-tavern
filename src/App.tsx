@@ -10,14 +10,20 @@ const App = () => (
     <ConnectionStatus />
     <div className="columns">
       <div className="column col-12">
-        <h1>dnd-tavern</h1>
-        <div className="columns">
-          <div className="column col-6 col-lg-9 col-md-9 col-sm-12">
-            <PeerConnector />
+        <div className="hero hero-sm bg-gray">
+          <div className="hero-body">
+            <h1>#dnd-tavern</h1>
           </div>
         </div>
-        <ConnectionsList />
-        <DiceRoller />
+        <div className="columns">
+          <div className="column col-6 col-lg-8 col-md-8 col-sm-12 mt-2">
+            <PeerConnector />
+            <ConnectionsList />
+          </div>
+          <div className="column col-6 col-lg-4 col-md-4 col-sm-12 mt-2">
+            <DiceRoller />
+          </div>
+        </div>
       </div>
     </div>
   </div>
