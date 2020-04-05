@@ -2,6 +2,7 @@ import React from 'react';
 import './App.scss';
 import { PeerConnector } from './components/peerConnector';
 import { ConnectionStatus } from './components/connectionStatus';
+import { ConnectionsList } from './components/connectionsList';
 
 const App = () => (
   <div className="container">
@@ -14,6 +15,7 @@ const App = () => (
             <PeerConnector />
           </div>
         </div>
+        <ConnectionsList />
       </div>
     </div>
   </div>

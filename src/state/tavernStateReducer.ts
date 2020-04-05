@@ -53,6 +53,11 @@ export interface NewConnectionAction {
   connection: Peer.DataConnection;
 }
 
+export interface ConnectionClosedAction {
+  type: 'CLOSED_CONNECTION';
+  connection: Peer.DataConnection;
+}
+
 type ReducerActions =
   | ConnectedAction
   | ConnectAction
@@ -60,7 +65,8 @@ type ReducerActions =
   | DisconnectedAction
   | SetPeerAction
   | PeerErrorAction
-  | NewConnectionAction;
+  | NewConnectionAction
+  | ConnectionClosedAction;
 
 export interface TavernStateContext {
   state: TavernState;
@@ -94,6 +100,13 @@ export const tavernStateReducer = (
       return {
         ...state,
         connections: appendConnection(state.connections, action.connection),
+      };
+    case 'CLOSED_CONNECTION':
+      return {
+        ...state,
+        connections: state.connections.filter(
+          (conn) => conn.peer !== action.connection.peer,
+        ),
       };
     case 'CONNECTED':
       return {
