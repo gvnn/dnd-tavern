@@ -23,6 +23,7 @@ export const DiceRoller = () => {
           type: 'ROLL',
           result: rollResult.renderedExpression,
           total: rollResult.total,
+          peer: state.brokerId,
         });
       });
     }
