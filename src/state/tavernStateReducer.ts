@@ -8,6 +8,7 @@ interface TavernState {
   isHost: boolean;
   connections: Peer.DataConnection[];
   err: any;
+  lastReceivedData: any;
 }
 
 export const initialState: TavernState = {
@@ -18,6 +19,7 @@ export const initialState: TavernState = {
   isHost: false,
   connections: [],
   err: undefined,
+  lastReceivedData: undefined,
 };
 
 export interface ConnectedAction {
@@ -58,6 +60,11 @@ export interface ConnectionClosedAction {
   connection: Peer.DataConnection;
 }
 
+export interface DataAction {
+  type: 'DATA';
+  data: any;
+}
+
 type ReducerActions =
   | ConnectedAction
   | ConnectAction
@@ -66,7 +73,8 @@ type ReducerActions =
   | SetPeerAction
   | PeerErrorAction
   | NewConnectionAction
-  | ConnectionClosedAction;
+  | ConnectionClosedAction
+  | DataAction;
 
 export interface TavernStateContext {
   state: TavernState;
@@ -115,6 +123,11 @@ export const tavernStateReducer = (
         remoteBrokerId: action.remoteBrokerId,
         connectionStatus: 'CONNECTED',
         isHost: action.brokerId === action.remoteBrokerId,
+      };
+    case 'DATA':
+      return {
+        ...state,
+        lastReceivedData: action.data,
       };
   }
 };

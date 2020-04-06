@@ -9,7 +9,9 @@ const connectAsHost = (
   dispatch({ type: 'CONNECTED', brokerId, remoteBrokerId });
   peer.on('connection', (connection) => {
     dispatch({ type: 'NEW_CONNECTION', connection });
-    connection.on('data', console.log);
+    connection.on('data', (data) => {
+      dispatch({ type: 'DATA', data });
+    });
     connection.on('close', () => {
       dispatch({ type: 'CLOSED_CONNECTION', connection });
     });
@@ -35,7 +37,9 @@ const connectAsClient = (
   remoteConnection.on('close', () => {
     dispatch({ type: 'CLOSED_CONNECTION', connection: remoteConnection });
   });
-  remoteConnection.on('data', console.log);
+  remoteConnection.on('data', (data) => {
+    dispatch({ type: 'DATA', data });
+  });
 };
 
 export const connect = (
