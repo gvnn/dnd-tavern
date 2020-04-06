@@ -89,6 +89,16 @@ const appendConnection = (
   newConnection,
 ];
 
+const relayData = (state: TavernState, data: any) => {
+  if (state.isHost) {
+    state.connections.forEach((conn) => {
+      if (conn.peer !== data.peer) {
+        conn.send(data);
+      }
+    });
+  }
+};
+
 export const tavernStateReducer = (
   state: TavernState,
   action: ReducerActions,
@@ -125,6 +135,7 @@ export const tavernStateReducer = (
         isHost: action.brokerId === action.remoteBrokerId,
       };
     case 'DATA':
+      relayData(state, action.data);
       return {
         ...state,
         lastReceivedData: action.data,
