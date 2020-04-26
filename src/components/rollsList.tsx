@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useTavern } from '../state/tavern';
 
 export const RollsList = () => {
