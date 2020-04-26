@@ -1,5 +1,11 @@
 import Peer from 'peerjs';
 
+interface DiceRoll {
+  result: string;
+  total: number;
+  peer: string;
+}
+
 interface TavernState {
   connectionStatus: string;
   brokerId: string | null;
@@ -9,6 +15,7 @@ interface TavernState {
   connections: Peer.DataConnection[];
   err: any;
   lastReceivedData: any;
+  rolls: DiceRoll[];
 }
 
 export const initialState: TavernState = {
@@ -20,6 +27,7 @@ export const initialState: TavernState = {
   connections: [],
   err: undefined,
   lastReceivedData: undefined,
+  rolls: [],
 };
 
 export interface ConnectedAction {
@@ -60,9 +68,11 @@ export interface ConnectionClosedAction {
   connection: Peer.DataConnection;
 }
 
-export interface DataAction {
-  type: 'DATA';
-  data: any;
+export interface RollerAction {
+  type: 'ROLL';
+  result: string;
+  total: number;
+  peer: string;
 }
 
 type ReducerActions =
@@ -74,7 +84,7 @@ type ReducerActions =
   | PeerErrorAction
   | NewConnectionAction
   | ConnectionClosedAction
-  | DataAction;
+  | RollerAction;
 
 export interface TavernStateContext {
   state: TavernState;
@@ -88,16 +98,6 @@ const appendConnection = (
   ...existing.filter((conn) => conn.peer !== newConnection.peer),
   newConnection,
 ];
-
-const relayData = (state: TavernState, data: any) => {
-  if (state.isHost) {
-    state.connections.forEach((conn) => {
-      if (conn.peer !== data.peer) {
-        conn.send(data);
-      }
-    });
-  }
-};
 
 export const tavernStateReducer = (
   state: TavernState,
@@ -134,11 +134,14 @@ export const tavernStateReducer = (
         connectionStatus: 'CONNECTED',
         isHost: action.brokerId === action.remoteBrokerId,
       };
-    case 'DATA':
-      relayData(state, action.data);
+    case 'ROLL':
       return {
         ...state,
-        lastReceivedData: action.data,
+        rolls: state.rolls.concat({
+          result: action.result,
+          total: action.total,
+          peer: action.peer,
+        }),
       };
   }
 };

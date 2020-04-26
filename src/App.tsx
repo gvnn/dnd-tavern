@@ -4,6 +4,7 @@ import { PeerConnector } from './components/peerConnector';
 import { ConnectionStatus } from './components/connectionStatus';
 import { ConnectionsList } from './components/connectionsList';
 import { DiceRoller } from './components/diceRoller';
+import { RollsList } from './components/rollsList';
 import { TavernProvider } from './state/tavern';
 
 const App = () => (
@@ -24,6 +25,7 @@ const App = () => (
             </div>
             <div className="column col-6 col-lg-4 col-md-4 col-sm-12 mt-2">
               <DiceRoller />
+              <RollsList />
             </div>
           </div>
         </div>

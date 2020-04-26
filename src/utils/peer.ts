@@ -10,7 +10,8 @@ const connectAsHost = (
   peer.on('connection', (connection) => {
     dispatch({ type: 'NEW_CONNECTION', connection });
     connection.on('data', (data) => {
-      dispatch({ type: 'DATA', data });
+      dispatch(data);
+      connection.send(data);
     });
     connection.on('close', () => {
       dispatch({ type: 'CLOSED_CONNECTION', connection });
@@ -38,7 +39,7 @@ const connectAsClient = (
     dispatch({ type: 'CLOSED_CONNECTION', connection: remoteConnection });
   });
   remoteConnection.on('data', (data) => {
-    dispatch({ type: 'DATA', data });
+    dispatch(data);
   });
 };
 
